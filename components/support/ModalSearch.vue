@@ -3,7 +3,7 @@
     <div class="absolute right-4 top-4">
       <span class="material-icons text-h4 w-6 text-white" @click="($emit('clickModal', 'close'))">close</span>
     </div>
-    <div class="flex mt-60 items-center ">
+    <div class="flex mt-60 items-center justify-center">
       <div class="w-full lg:w-1/4 px-[15px]">
         <p class="font-bold text-white text-[20px] text-center mb-[30px]">Search</p>
         <input-text v-model="search" class="mb-[15px]" />

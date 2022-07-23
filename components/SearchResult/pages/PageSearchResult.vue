@@ -6,8 +6,8 @@
       <p class="text-[#7b34dd] text-[18px] font-semibold ml-2">{{search}}</p>
     </div>
     <div class="px-[15px] mt-6">
-      <div v-for="(dt, i) in 6" :key="i">
-        <section-list class="mb-5" />
+      <div v-for="(music, i) in listMusics" :key="i">
+        <section-list v-bind="music" class="mb-5" />
       </div>
     </div>
     <modal-search :show="modalShow" @clickModal="handleClick" />
@@ -25,7 +25,8 @@ export default Vue.extend({
   data() {
     return {
       modalShow: false,
-      search: null as any
+      search: null as any,
+      listMusics: [] as any
     }
   },
   watch: {
@@ -39,8 +40,19 @@ export default Vue.extend({
   methods: {
     async initialize() {
       this.search = this.$route?.query?.search || null
-      const result = await this.$axios.$get('https://itunes.apple.com/search?term=jack+johnson&limit=25.')
-      console.log(result)
+      const search = this.search.replace(' ', '+')
+      const response = await this.$axios.$get(`https://itunes.apple.com/search?term=${search}&limit=30`)
+      const data = response.results
+      const lists = data.map((item: any) => {
+        return {
+          artistName: item?.artistName || null,
+          genre: item?.kind || null,
+          titel: item?.collectionName || null,
+          price: item?.collectionPrice || null,
+          imageCover: item?.artworkUrl60 || null 
+        }
+      })
+      this.listMusics = lists
     },
     handleClick(menu: string) {
       if(menu === 'search') {
